@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">News App T1</string>
+    <string name="see_entire_news">See Entire News</string>
+    <string name="news_image">News Image</string>
 </resources>

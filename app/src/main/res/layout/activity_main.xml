@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
 
-    <LinearLayout xmlns:tools="http://schemas.android.com/tools"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        tools:context=".MainActivity">
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/newsTitle"
@@ -35,7 +37,7 @@
             android:layout_width="match_parent"
             android:layout_height="250dp"
             android:layout_marginTop="16dp"
-            android:contentDescription="Imagem da notícia"
+            android:contentDescription="@string/news_image"
             android:src="@drawable/ic_no_image" />
 
         <TextView
@@ -74,7 +76,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:text="See Entire News" />
+            android:text="@string/see_entire_news" />
 
     </LinearLayout>
 </ScrollView>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">News App T1</string>
+    <string name="see_entire_news">Ver notícia completa</string>
+    <string name="news_image">Imagem da notícia</string>
+</resources>
