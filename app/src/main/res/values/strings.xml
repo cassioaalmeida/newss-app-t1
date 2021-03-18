@@ -2,4 +2,6 @@
     <string name="app_name">News App T1</string>
     <string name="see_entire_news">See Entire News</string>
     <string name="news_image">News Image</string>
+    <string name="news_source">By %1$s in %2$s</string>
+    <string name="news_lastupdate">Last updated at: %1$s</string>
 </resources>
