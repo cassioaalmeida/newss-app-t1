@@ -34,7 +34,8 @@ fun main() {
 
     println(database.getAllContacts())
 
-    val bruno1 = Contact("Bruno", "Mendonça", phone = "999999")
+    //val bruno1 = Contact("Bruno", "Mendonça", phone = "999999")
+    Contact.TEST
 }
 
 data class Contact(
@@ -43,7 +44,13 @@ data class Contact(
     val nickName: String? = null,
     val phone: String,
     val id: Int? = null
-)
+) {
+    companion object {
+        const val TEST = "TEST"
+    }
+
+
+}
 
 class Database() {
     private val contacts: MutableMap<Int, Contact> = mutableMapOf()
