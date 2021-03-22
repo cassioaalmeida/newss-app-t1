@@ -32,11 +32,11 @@ class NewsListActivity : AppCompatActivity() {
                 "https://arstechnica.com/tech-policy/2021/03/i-was-a-teenage-twitter-hacker-graham-ivan-clark-gets-3-year-sentence/"
             )
 
-        binding.btnNavigationTest.setOnClickListener {
-            val navigateToDetailsIntent = Intent(this, NewsDetailActivity::class.java)
-            navigateToDetailsIntent.putExtra(NewsDetailActivity.NEWS_DETAIL_KEY, news)
-            startActivity(navigateToDetailsIntent)
-        }
+//        binding.btnNavigationTest.setOnClickListener {
+//            val navigateToDetailsIntent = Intent(this, NewsDetailActivity::class.java)
+//            navigateToDetailsIntent.putExtra(NewsDetailActivity.NEWS_DETAIL_KEY, news)
+//            startActivity(navigateToDetailsIntent)
+//        }
     }
 
 
