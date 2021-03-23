@@ -1,20 +1,25 @@
 package com.example.newsappt1
 
 import android.content.Context
-import android.content.Intent
 import android.view.View
 import com.bumptech.glide.Glide
 import com.example.newsappt1.databinding.NewsItemBinding
+import com.example.newsappt1.databinding.TextItemBinding
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.viewbinding.BindableItem
 
 class NewsListAdapter(val context: Context): GroupAdapter<GroupieViewHolder>() {
 
-    fun addData(dataSet: List<News>, clickListener: (News) -> Unit) {
-        dataSet.forEach { news ->
+    fun addText(text: String) {
+        add(TextItem(text))
+    }
+
+    fun addData(newsList: List<News>, clickListener: (News) -> Unit) {
+        newsList.forEach { news ->
             add(NewsItem(news, clickListener))
         }
+        add(TextItem("Finalizou de adicionar os dados"))
     }
 
     inner class NewsItem(val news: News, val clickListener: (News) -> Unit) : BindableItem<NewsItemBinding>() {
@@ -37,6 +42,17 @@ class NewsListAdapter(val context: Context): GroupAdapter<GroupieViewHolder>() {
         override fun getLayout(): Int = R.layout.news_item
 
         override fun initializeViewBinding(view: View): NewsItemBinding = NewsItemBinding.bind(view)
+
+    }
+
+    inner class TextItem(private val text: String): BindableItem<TextItemBinding>() {
+        override fun bind(viewBinding: TextItemBinding, position: Int) {
+            viewBinding.txtItemText.text = text
+        }
+
+        override fun getLayout(): Int = R.layout.text_item
+
+        override fun initializeViewBinding(view: View): TextItemBinding = TextItemBinding.bind(view)
 
     }
 

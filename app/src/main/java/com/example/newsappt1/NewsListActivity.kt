@@ -187,11 +187,13 @@ class NewsListActivity : AppCompatActivity() {
 
 
         val adapter = NewsListAdapter(this)
+        adapter.addText("Cabeçalho")
         adapter.addData(newsList) { news ->
             val navigateToDetailsIntent = Intent(this, NewsDetailActivity::class.java)
             navigateToDetailsIntent.putExtra(NewsDetailActivity.NEWS_DETAIL_KEY, news)
             startActivity(navigateToDetailsIntent)
         }
+        adapter.addText("Rodapé")
 
         binding.recyclerviewNews.adapter = adapter
         binding.recyclerviewNews.layoutManager = LinearLayoutManager(this)
