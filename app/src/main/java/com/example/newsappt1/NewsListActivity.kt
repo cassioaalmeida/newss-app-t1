@@ -2,6 +2,7 @@ package com.example.newsappt1
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.newsappt1.databinding.ActivityNewsListBinding
@@ -187,13 +188,20 @@ class NewsListActivity : AppCompatActivity() {
 
 
         val adapter = NewsListAdapter(this)
-        adapter.addText("Cabeçalho")
+
+        adapter.addText("Cabeçalho") { textoClicado ->
+            Toast.makeText(this, textoClicado, Toast.LENGTH_SHORT).show()
+        }
+
         adapter.addData(newsList) { news ->
             val navigateToDetailsIntent = Intent(this, NewsDetailActivity::class.java)
             navigateToDetailsIntent.putExtra(NewsDetailActivity.NEWS_DETAIL_KEY, news)
             startActivity(navigateToDetailsIntent)
         }
-        adapter.addText("Rodapé")
+
+        adapter.addText("Rodapé") { textoClicado ->
+            Toast.makeText(this, textoClicado, Toast.LENGTH_SHORT).show()
+        }
 
         binding.recyclerviewNews.adapter = adapter
         binding.recyclerviewNews.layoutManager = LinearLayoutManager(this)

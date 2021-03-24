@@ -11,15 +11,14 @@ import com.xwray.groupie.viewbinding.BindableItem
 
 class NewsListAdapter(val context: Context): GroupAdapter<GroupieViewHolder>() {
 
-    fun addText(text: String) {
-        add(TextItem(text))
+    fun addText(text: String, clickListener: (String) -> Unit) {
+        add(TextItem(text, clickListener))
     }
 
     fun addData(newsList: List<News>, clickListener: (News) -> Unit) {
         newsList.forEach { news ->
             add(NewsItem(news, clickListener))
         }
-        add(TextItem("Finalizou de adicionar os dados"))
     }
 
     inner class NewsItem(val news: News, val clickListener: (News) -> Unit) : BindableItem<NewsItemBinding>() {
@@ -45,9 +44,14 @@ class NewsListAdapter(val context: Context): GroupAdapter<GroupieViewHolder>() {
 
     }
 
-    inner class TextItem(private val text: String): BindableItem<TextItemBinding>() {
+    inner class TextItem(private val text: String, private val clickListener: (String) -> Unit): BindableItem<TextItemBinding>() {
+
         override fun bind(viewBinding: TextItemBinding, position: Int) {
             viewBinding.txtItemText.text = text
+
+            viewBinding.root.setOnClickListener {
+                clickListener(text)
+            }
         }
 
         override fun getLayout(): Int = R.layout.text_item
