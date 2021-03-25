@@ -3,6 +3,7 @@ package com.example.newsappt1
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.view.View
 import android.webkit.URLUtil
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -25,11 +26,17 @@ class NewsDetailActivity : AppCompatActivity() {
 
         val news = intent.getParcelableExtra<News>(NEWS_DETAIL_KEY)
 
-        if(news != null) {
+        if (news != null) {
             binding.newsTitle.text = news.title
-            binding.newsDescription.text = news.description
-            binding.newsContent.text = news.content
-            binding.newsSource.text = getString(R.string.news_source, news.author, news.source)
+
+            if (news.description != null) binding.newsDescription.text = news.description
+            else binding.newsDescription.visibility = View.GONE
+
+            if(news.content != null) binding.newsContent.text = news.content
+            else binding.newsContent.visibility = View.GONE
+
+            binding.newsSource.text = getString(R.string.news_source, news.author ?: getString(R.string.unknown), news.source.name)
+
             binding.newsLastUpdate.text = getString(R.string.news_lastupdate, news.lastUpdate)
 
             Glide
@@ -45,7 +52,8 @@ class NewsDetailActivity : AppCompatActivity() {
                     if (intent.resolveActivity(packageManager) != null) {
                         startActivity(intent)
                     } else {
-                        Toast.makeText(this, "You need to install a browser", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "You need to install a browser", Toast.LENGTH_SHORT)
+                            .show()
                     }
                 } else {
                     Toast.makeText(this, "Invalid URL", Toast.LENGTH_SHORT).show()

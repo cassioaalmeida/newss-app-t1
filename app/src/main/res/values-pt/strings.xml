@@ -7,4 +7,5 @@
     <string name="news_lastupdate">Atualizado em: %1$s</string>
     <string name="get_data_error">Ocorreu um erro ao baixar os dados</string>
     <string name="try_again">Tentar novamente</string>
+    <string name="unknown">desconhecido</string>
 </resources>
