@@ -4,4 +4,6 @@
     <string name="news_image">News Image</string>
     <string name="news_source">By %1$s in %2$s</string>
     <string name="news_lastupdate">Last updated at: %1$s</string>
+    <string name="get_data_error">An error occurred on get data from service</string>
+    <string name="try_again">Try Again</string>
 </resources>

@@ -5,4 +5,6 @@
     <string name="news_image">Imagem da notícia</string>
     <string name="news_source">Por %1$s em %2$s</string>
     <string name="news_lastupdate">Atualizado em: %1$s</string>
+    <string name="get_data_error">Ocorreu um erro ao baixar os dados</string>
+    <string name="try_again">Tentar novamente</string>
 </resources>

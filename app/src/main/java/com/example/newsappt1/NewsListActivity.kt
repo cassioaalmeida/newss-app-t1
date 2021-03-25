@@ -2,6 +2,7 @@ package com.example.newsappt1
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,6 +20,7 @@ class NewsListActivity : AppCompatActivity() {
     lateinit var binding: ActivityNewsListBinding
     private var newsList: ArrayList<News>? = null
     private lateinit var adapter: NewsListAdapter
+    private val service = RetrofitInitializer.getNewsApiService()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,36 +28,52 @@ class NewsListActivity : AppCompatActivity() {
         binding = ActivityNewsListBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        binding.btnTryAgain.setOnClickListener {
+            getDataFromService()
+        }
+
         adapter = NewsListAdapter(this)
         binding.recyclerviewNews.adapter = adapter
         binding.recyclerviewNews.layoutManager = LinearLayoutManager(this)
 
-        val service = RetrofitInitializer.getNewsApiService()
-
         if (savedInstanceState?.getParcelableArrayList<News>(NEWS_KEY) == null) {
-            service.getTopHeadlines("br").enqueue(object : Callback<NewsList> {
-                override fun onResponse(call: Call<NewsList>, response: Response<NewsList>) {
-                    // verifica se o retorno foi feito com sucesso
-                    if (response.isSuccessful && response.body() != null) {
-                        // tenho acesso a minha lista de notícias
-                        newsList = response.body()!!.items as ArrayList<News>
-                        showList()
-                    } else {
-                        // informa meu usuário de que a chamada ao serviço falhou
-                    }
-
-                }
-
-                override fun onFailure(call: Call<NewsList>, t: Throwable) {
-                    // informa meu usuário de que a chamada ao serviço falhou
-                }
-
-            })
+            getDataFromService()
         } else {
             newsList = savedInstanceState.getParcelableArrayList<News>(NEWS_KEY)
             showList()
         }
 
+    }
+
+    fun getDataFromService() {
+        binding.recyclerviewNews.visibility = View.GONE
+        binding.emptyStateIndicator.visibility = View.GONE
+        binding.progressIndicator.visibility = View.VISIBLE
+
+        service.getTopHeadlines("br").enqueue(object : Callback<NewsList> {
+            override fun onResponse(call: Call<NewsList>, response: Response<NewsList>) {
+                // verifica se o retorno foi feito com sucesso
+                if (response.isSuccessful && response.body() != null) {
+                    // tenho acesso a minha lista de notícias
+                    newsList = response.body()!!.items as ArrayList<News>
+                    showList()
+                } else {
+                    showEmptyState()
+                }
+
+            }
+
+            override fun onFailure(call: Call<NewsList>, t: Throwable) {
+                showEmptyState()
+            }
+
+        })
+    }
+
+    fun showEmptyState() {
+        binding.progressIndicator.visibility = View.GONE
+        binding.recyclerviewNews.visibility = View.GONE
+        binding.emptyStateIndicator.visibility = View.VISIBLE
     }
 
     fun showList() {
@@ -65,6 +83,10 @@ class NewsListActivity : AppCompatActivity() {
                 navigateToDetailsIntent.putExtra(NewsDetailActivity.NEWS_DETAIL_KEY, news)
                 startActivity(navigateToDetailsIntent)
             }
+
+            binding.progressIndicator.visibility = View.GONE
+            binding.emptyStateIndicator.visibility = View.GONE
+            binding.recyclerviewNews.visibility = View.VISIBLE
         }
     }
 
