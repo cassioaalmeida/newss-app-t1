@@ -26,49 +26,48 @@ class NewsDetailActivity : AppCompatActivity() {
         binding = ActivityNewsDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        viewModel = ViewModelProvider(this).get(NewsDetailViewModel::class.java)
-        viewModel.news = intent.getParcelableExtra<News>(NEWS_DETAIL_KEY)
+        val news = intent.getParcelableExtra<News>(NEWS_DETAIL_KEY)
+        val viewModelFactory = NewsDetailViewModelFactory(news!!)
+        viewModel = ViewModelProvider(this, viewModelFactory).get(NewsDetailViewModel::class.java)
 
-        viewModel.news?.let { nonnullNews ->
-            binding.newsTitle.text = nonnullNews.title
+        binding.newsTitle.text = viewModel.news.title
 
-            if (nonnullNews.description != null) binding.newsDescription.text =
-                nonnullNews.description
-            else binding.newsDescription.visibility = View.GONE
+        if (viewModel.news.description != null) binding.newsDescription.text =
+            viewModel.news.description
+        else binding.newsDescription.visibility = View.GONE
 
-            if (nonnullNews.content != null) binding.newsContent.text = nonnullNews.content
-            else binding.newsContent.visibility = View.GONE
+        if (viewModel.news.content != null) binding.newsContent.text = viewModel.news.content
+        else binding.newsContent.visibility = View.GONE
 
-            binding.newsSource.text = getString(
-                R.string.news_source,
-                nonnullNews.author ?: getString(R.string.unknown),
-                nonnullNews.source.name
-            )
+        binding.newsSource.text = getString(
+            R.string.news_source,
+            viewModel.news.author ?: getString(R.string.unknown),
+            viewModel.news.source.name
+        )
 
-            binding.newsLastUpdate.text =
-                getString(R.string.news_lastupdate, nonnullNews.lastUpdate)
+        binding.newsLastUpdate.text =
+            getString(R.string.news_lastupdate, viewModel.news.lastUpdate)
 
-            Glide
-                .with(this)
-                .load(nonnullNews.imageUrl)
-                .placeholder(R.drawable.ic_no_image)
-                .into(binding.newsImage)
+        Glide
+            .with(this)
+            .load(viewModel.news.imageUrl)
+            .placeholder(R.drawable.ic_no_image)
+            .into(binding.newsImage)
 
-            binding.btnShowNews.setOnClickListener {
-                if (URLUtil.isValidUrl(nonnullNews.newsUrl)) {
-                    val webpage: Uri = Uri.parse(nonnullNews.newsUrl)
-                    val intent = Intent(Intent.ACTION_VIEW, webpage)
-                    if (intent.resolveActivity(packageManager) != null) {
-                        startActivity(intent)
-                    } else {
-                        Toast.makeText(this, "You need to install a browser", Toast.LENGTH_SHORT)
-                            .show()
-                    }
+        binding.btnShowNews.setOnClickListener {
+            if (URLUtil.isValidUrl(viewModel.news.newsUrl)) {
+                val webpage: Uri = Uri.parse(viewModel.news.newsUrl)
+                val intent = Intent(Intent.ACTION_VIEW, webpage)
+                if (intent.resolveActivity(packageManager) != null) {
+                    startActivity(intent)
                 } else {
-                    Toast.makeText(this, "Invalid URL", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "You need to install a browser", Toast.LENGTH_SHORT)
+                        .show()
                 }
+            } else {
+                Toast.makeText(this, "Invalid URL", Toast.LENGTH_SHORT).show()
             }
-        } ?: throw NullPointerException("News can't be null")
+        }
     }
 
 }
