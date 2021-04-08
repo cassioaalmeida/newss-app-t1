@@ -18,7 +18,7 @@ class NewsListActivity : AppCompatActivity() {
     lateinit var binding: ActivityNewsListBinding
 
     private lateinit var adapter: NewsListAdapter
-    private val service = RetrofitInitializer.getNewsApiService()
+//    private val service = RetrofitInitializer.getNewsApiService()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,45 +30,43 @@ class NewsListActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(this).get(NewsListViewModel::class.java)
 
         binding.btnTryAgain.setOnClickListener {
-            getDataFromService()
+            viewModel.getDataFromService()
         }
 
         adapter = NewsListAdapter(this)
         binding.recyclerviewNews.adapter = adapter
         binding.recyclerviewNews.layoutManager = LinearLayoutManager(this)
 
-        if (viewModel.newsList == null) {
-            getDataFromService()
-        } else {
-            showList()
+        viewModel.newsList.observe(this) { updatedNewsList ->
+            showList(updatedNewsList)
         }
 
     }
 
-    fun getDataFromService() {
-        binding.recyclerviewNews.visibility = View.GONE
-        binding.emptyStateIndicator.visibility = View.GONE
-        binding.progressIndicator.visibility = View.VISIBLE
-
-        service.getTopHeadlines("br").enqueue(object : Callback<NewsList> {
-            override fun onResponse(call: Call<NewsList>, response: Response<NewsList>) {
-                // verifica se o retorno foi feito com sucesso
-                if (response.isSuccessful && response.body() != null) {
-                    // tenho acesso a minha lista de notícias
-                    viewModel.newsList = response.body()!!.items as ArrayList<News>
-                    showList()
-                } else {
-                    showEmptyState()
-                }
-
-            }
-
-            override fun onFailure(call: Call<NewsList>, t: Throwable) {
-                showEmptyState()
-            }
-
-        })
-    }
+//    fun getDataFromService() {
+//        binding.recyclerviewNews.visibility = View.GONE
+//        binding.emptyStateIndicator.visibility = View.GONE
+//        binding.progressIndicator.visibility = View.VISIBLE
+//
+//        service.getTopHeadlines("br").enqueue(object : Callback<NewsList> {
+//            override fun onResponse(call: Call<NewsList>, response: Response<NewsList>) {
+//                // verifica se o retorno foi feito com sucesso
+//                if (response.isSuccessful && response.body() != null) {
+//                    // tenho acesso a minha lista de notícias
+//                    viewModel.newsList = response.body()!!.items as ArrayList<News>
+//                    showList()
+//                } else {
+//                    showEmptyState()
+//                }
+//
+//            }
+//
+//            override fun onFailure(call: Call<NewsList>, t: Throwable) {
+//                showEmptyState()
+//            }
+//
+//        })
+//    }
 
     fun showEmptyState() {
         binding.progressIndicator.visibility = View.GONE
@@ -76,18 +74,16 @@ class NewsListActivity : AppCompatActivity() {
         binding.emptyStateIndicator.visibility = View.VISIBLE
     }
 
-    fun showList() {
-        viewModel.newsList?.let {
-            adapter.addData(it) { news ->
-                val navigateToDetailsIntent = Intent(this, NewsDetailActivity::class.java)
-                navigateToDetailsIntent.putExtra(NewsDetailActivity.NEWS_DETAIL_KEY, news)
-                startActivity(navigateToDetailsIntent)
-            }
-
-            binding.progressIndicator.visibility = View.GONE
-            binding.emptyStateIndicator.visibility = View.GONE
-            binding.recyclerviewNews.visibility = View.VISIBLE
+    fun showList(newsList: List<News>) {
+        adapter.addData(newsList) { news ->
+            val navigateToDetailsIntent = Intent(this, NewsDetailActivity::class.java)
+            navigateToDetailsIntent.putExtra(NewsDetailActivity.NEWS_DETAIL_KEY, news)
+            startActivity(navigateToDetailsIntent)
         }
+
+        binding.progressIndicator.visibility = View.GONE
+        binding.emptyStateIndicator.visibility = View.GONE
+        binding.recyclerviewNews.visibility = View.VISIBLE
     }
 
 }
