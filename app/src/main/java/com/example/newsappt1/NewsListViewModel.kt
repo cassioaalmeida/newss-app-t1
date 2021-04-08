@@ -1,5 +1,6 @@
 package com.example.newsappt1
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import retrofit2.Call
@@ -8,9 +9,13 @@ import retrofit2.Response
 
 class NewsListViewModel() : ViewModel() {
 
-    val newsList: MutableLiveData<List<News>> = MutableLiveData()
+    private val _newsList: MutableLiveData<List<News>> = MutableLiveData()
+    val newsList: LiveData<List<News>>
+        get() = _newsList
 
-    val screenState: MutableLiveData<ScreenState> = MutableLiveData()
+    private val _screenState: MutableLiveData<ScreenState> = MutableLiveData()
+    val screenState: LiveData<ScreenState>
+        get() = _screenState
 
     private val service = RetrofitInitializer.getNewsApiService()
 
@@ -18,23 +23,27 @@ class NewsListViewModel() : ViewModel() {
         getDataFromService()
     }
 
-    fun getDataFromService() {
-        screenState.value = ScreenState.LOADING
+    fun onTryAgainClicked() {
+        getDataFromService()
+    }
+
+    private fun getDataFromService() {
+        _screenState.value = ScreenState.LOADING
 
         service.getTopHeadlines("br").enqueue(object : Callback<NewsList> {
             override fun onResponse(call: Call<NewsList>, response: Response<NewsList>) {
                 // verifica se o retorno foi feito com sucesso
                 if (response.isSuccessful && response.body() != null) {
                     // tenho acesso a minha lista de notícias
-                    newsList.value = response.body()!!.items as ArrayList<News>
-                    screenState.value = ScreenState.SUCCESS
+                    _newsList.value = response.body()!!.items as ArrayList<News>
+                    _screenState.value = ScreenState.SUCCESS
                 } else {
-                    screenState.value = ScreenState.ERROR
+                    _screenState.value = ScreenState.ERROR
                 }
             }
 
             override fun onFailure(call: Call<NewsList>, t: Throwable) {
-                screenState.value = ScreenState.ERROR
+                _screenState.value = ScreenState.ERROR
             }
         })
     }

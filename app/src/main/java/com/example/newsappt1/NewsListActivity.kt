@@ -27,7 +27,7 @@ class NewsListActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(this).get(NewsListViewModel::class.java)
 
         binding.btnTryAgain.setOnClickListener {
-            viewModel.getDataFromService()
+            viewModel.onTryAgainClicked()
         }
 
         adapter = NewsListAdapter(this)
@@ -35,7 +35,11 @@ class NewsListActivity : AppCompatActivity() {
         binding.recyclerviewNews.layoutManager = LinearLayoutManager(this)
 
         viewModel.newsList.observe(this) { updatedNewsList ->
-            showList(updatedNewsList)
+            adapter.addData(updatedNewsList) { news ->
+                val navigateToDetailsIntent = Intent(this, NewsDetailActivity::class.java)
+                navigateToDetailsIntent.putExtra(NewsDetailActivity.NEWS_DETAIL_KEY, news)
+                startActivity(navigateToDetailsIntent)
+            }
         }
 
         viewModel.screenState.observe(this) { lastScreenState ->
@@ -57,14 +61,6 @@ class NewsListActivity : AppCompatActivity() {
                 }
                 else -> throw IllegalStateException("Unknown ScreenState")
             }
-        }
-    }
-
-    fun showList(newsList: List<News>) {
-        adapter.addData(newsList) { news ->
-            val navigateToDetailsIntent = Intent(this, NewsDetailActivity::class.java)
-            navigateToDetailsIntent.putExtra(NewsDetailActivity.NEWS_DETAIL_KEY, news)
-            startActivity(navigateToDetailsIntent)
         }
     }
 }
