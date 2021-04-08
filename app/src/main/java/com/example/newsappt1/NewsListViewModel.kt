@@ -1,15 +1,16 @@
 package com.example.newsappt1
 
-import android.view.View
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class NewsListViewModel(): ViewModel() {
+class NewsListViewModel() : ViewModel() {
 
     val newsList: MutableLiveData<List<News>> = MutableLiveData()
+
+    val screenState: MutableLiveData<ScreenState> = MutableLiveData()
 
     private val service = RetrofitInitializer.getNewsApiService()
 
@@ -18,7 +19,7 @@ class NewsListViewModel(): ViewModel() {
     }
 
     fun getDataFromService() {
-        //view.showLoading()
+        screenState.value = ScreenState.LOADING
 
         service.getTopHeadlines("br").enqueue(object : Callback<NewsList> {
             override fun onResponse(call: Call<NewsList>, response: Response<NewsList>) {
@@ -26,19 +27,15 @@ class NewsListViewModel(): ViewModel() {
                 if (response.isSuccessful && response.body() != null) {
                     // tenho acesso a minha lista de notícias
                     newsList.value = response.body()!!.items as ArrayList<News>
-                    //view.showList()
+                    screenState.value = ScreenState.SUCCESS
                 } else {
-                    //view.showEmptyState()
+                    screenState.value = ScreenState.ERROR
                 }
-
             }
 
             override fun onFailure(call: Call<NewsList>, t: Throwable) {
-                //view.showEmptyState()
+                screenState.value = ScreenState.ERROR
             }
-
         })
     }
-
-
 }
