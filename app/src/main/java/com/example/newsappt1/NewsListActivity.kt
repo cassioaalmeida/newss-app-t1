@@ -36,10 +36,14 @@ class NewsListActivity : AppCompatActivity() {
 
         viewModel.newsList.observe(this) { updatedNewsList ->
             adapter.addData(updatedNewsList) { news ->
-                val navigateToDetailsIntent = Intent(this, NewsDetailActivity::class.java)
-                navigateToDetailsIntent.putExtra(NewsDetailActivity.NEWS_DETAIL_KEY, news)
-                startActivity(navigateToDetailsIntent)
+                viewModel.onNewsItemClicked(news)
             }
+        }
+
+        viewModel.navigationDetail.observe(this) { news ->
+            val navigateToDetailsIntent = Intent(this, NewsDetailActivity::class.java)
+            navigateToDetailsIntent.putExtra(NewsDetailActivity.NEWS_DETAIL_KEY, news)
+            startActivity(navigateToDetailsIntent)
         }
 
         viewModel.screenState.observe(this) { lastScreenState ->
