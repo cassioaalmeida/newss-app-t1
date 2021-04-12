@@ -60,17 +60,21 @@ class NewsDetailActivity : AppCompatActivity() {
 
         }
 
-        viewModel.navigationShowNews.observe(this) { uri ->
-            val intent = Intent(Intent.ACTION_VIEW, uri)
-            if (intent.resolveActivity(packageManager) != null) {
-                startActivity(intent)
-            } else {
-                viewModel.onShowNewsResolveActivityFail()
+        viewModel.navigationShowNews.observe(this) { uriEvent ->
+            uriEvent.handleEvent { uri ->
+                val intent = Intent(Intent.ACTION_VIEW, uri)
+                if (intent.resolveActivity(packageManager) != null) {
+                    startActivity(intent)
+                } else {
+                    viewModel.onShowNewsResolveActivityFail()
+                }
             }
         }
 
-        viewModel.message.observe(this) { message ->
-            Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+        viewModel.message.observe(this) { messageEvent ->
+            messageEvent.handleEvent { message ->
+                Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+            }
         }
 
     }
