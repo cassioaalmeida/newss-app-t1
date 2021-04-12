@@ -35,18 +35,23 @@ class NewsListActivity : AppCompatActivity() {
         binding.recyclerviewNews.layoutManager = LinearLayoutManager(this)
 
         viewModel.newsList.observe(this) { updatedNewsList ->
+            Log.i("LiveDataEvent", "Recebi lista de notícias")
             adapter.addData(updatedNewsList) { news ->
                 viewModel.onNewsItemClicked(news)
             }
         }
 
-        viewModel.navigationDetail.observe(this) { news ->
-            val navigateToDetailsIntent = Intent(this, NewsDetailActivity::class.java)
-            navigateToDetailsIntent.putExtra(NewsDetailActivity.NEWS_DETAIL_KEY, news)
-            startActivity(navigateToDetailsIntent)
+        viewModel.navigationDetail.observe(this) { newsEvent ->
+            Log.i("LiveDataEvent", "Recebi navigation detail")
+            newsEvent.handleEvent { news ->
+                val navigateToDetailsIntent = Intent(this, NewsDetailActivity::class.java)
+                navigateToDetailsIntent.putExtra(NewsDetailActivity.NEWS_DETAIL_KEY, news)
+                startActivity(navigateToDetailsIntent)
+            }
         }
 
         viewModel.screenState.observe(this) { lastScreenState ->
+            Log.i("LiveDataEvent", "Recebi screen state")
             when (lastScreenState) {
                 ScreenState.SUCCESS -> {
                     binding.progressIndicator.visibility = View.GONE

@@ -17,8 +17,8 @@ class NewsListViewModel() : ViewModel() {
     val screenState: LiveData<ScreenState>
         get() = _screenState
 
-    private val _navigationDetail: MutableLiveData<News> = MutableLiveData()
-    val navigationDetail: LiveData<News>
+    private val _navigationDetail: MutableLiveData<Event<News>> = MutableLiveData()
+    val navigationDetail: LiveData<Event<News>>
         get() = _navigationDetail
 
     private val service = RetrofitInitializer.getNewsApiService()
@@ -32,7 +32,7 @@ class NewsListViewModel() : ViewModel() {
     }
 
     fun onNewsItemClicked(news: News) {
-        _navigationDetail.value = news
+        _navigationDetail.value = Event(news)
     }
 
     private fun getDataFromService() {
