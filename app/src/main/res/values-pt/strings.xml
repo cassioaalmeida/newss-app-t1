@@ -8,4 +8,6 @@
     <string name="get_data_error">Ocorreu um erro ao baixar os dados</string>
     <string name="try_again">Tentar novamente</string>
     <string name="unknown">desconhecido</string>
+    <string name="invalid_url">URL inválido</string>
+    <string name="browser_needed">Você precisa instalar um navegador</string>
 </resources>

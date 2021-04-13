@@ -7,4 +7,6 @@
     <string name="get_data_error">An error occurred on get data from service</string>
     <string name="try_again">Try Again</string>
     <string name="unknown">unknown</string>
+    <string name="invalid_url">Invalid URL</string>
+    <string name="browser_needed">You need to install a browser</string>
 </resources>

@@ -16,8 +16,8 @@ class NewsDetailViewModel(news: News) : ViewModel() {
     val navigationShowNews: LiveData<Event<Uri>>
         get() = _navigationShowNews
 
-    private val _message: MutableLiveData<Event<String>> = MutableLiveData()
-    val message: LiveData<Event<String>>
+    private val _message: MutableLiveData<Event<Int>> = MutableLiveData()
+    val message: LiveData<Event<Int>>
         get() = _message
 
     init {
@@ -29,11 +29,11 @@ class NewsDetailViewModel(news: News) : ViewModel() {
             val webpage: Uri = Uri.parse(news.newsUrl)
             _navigationShowNews.value = Event(webpage)
         } else {
-            _message.value = Event("Invalid URL")
+            _message.value = Event(R.string.invalid_url)
         }
     }
 
     fun onShowNewsResolveActivityFail() {
-        _message.value = Event("You need to install a browser")
+        _message.value = Event(R.string.browser_needed)
     }
 }
