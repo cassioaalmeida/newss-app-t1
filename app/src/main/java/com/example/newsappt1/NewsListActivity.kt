@@ -34,13 +34,6 @@ class NewsListActivity : AppCompatActivity() {
         binding.recyclerviewNews.adapter = adapter
         binding.recyclerviewNews.layoutManager = LinearLayoutManager(this)
 
-        viewModel.newsList.observe(this) { updatedNewsList ->
-            Log.i("LiveDataEvent", "Recebi lista de notícias")
-            adapter.addData(updatedNewsList) { news ->
-                viewModel.onNewsItemClicked(news)
-            }
-        }
-
         viewModel.navigationDetail.observe(this) { newsEvent ->
             Log.i("LiveDataEvent", "Recebi navigation detail")
             newsEvent.handleEvent { news ->
@@ -53,17 +46,20 @@ class NewsListActivity : AppCompatActivity() {
         viewModel.screenState.observe(this) { lastScreenState ->
             Log.i("LiveDataEvent", "Recebi screen state")
             when (lastScreenState) {
-                ScreenState.SUCCESS -> {
+                is ScreenState.Success<List<News>> -> {
+                    adapter.addData(lastScreenState.data) { news ->
+                        viewModel.onNewsItemClicked(news)
+                    }
                     binding.progressIndicator.visibility = View.GONE
                     binding.emptyStateIndicator.visibility = View.GONE
                     binding.recyclerviewNews.visibility = View.VISIBLE
                 }
-                ScreenState.ERROR -> {
+                is ScreenState.Error -> {
                     binding.progressIndicator.visibility = View.GONE
                     binding.recyclerviewNews.visibility = View.GONE
                     binding.emptyStateIndicator.visibility = View.VISIBLE
                 }
-                ScreenState.LOADING -> {
+                is ScreenState.Loading -> {
                     binding.recyclerviewNews.visibility = View.GONE
                     binding.emptyStateIndicator.visibility = View.GONE
                     binding.progressIndicator.visibility = View.VISIBLE
