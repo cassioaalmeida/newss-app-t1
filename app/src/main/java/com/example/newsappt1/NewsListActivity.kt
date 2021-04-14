@@ -8,7 +8,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.newsappt1.databinding.ActivityNewsListBinding
-import java.lang.IllegalStateException
 
 class NewsListActivity : AppCompatActivity() {
 
@@ -30,6 +29,10 @@ class NewsListActivity : AppCompatActivity() {
             viewModel.onTryAgainClicked()
         }
 
+        binding.fabSearchNews.setOnClickListener {
+            viewModel.onSearchNewsClicked()
+        }
+
         adapter = NewsListAdapter(this)
         binding.recyclerviewNews.adapter = adapter
         binding.recyclerviewNews.layoutManager = LinearLayoutManager(this)
@@ -40,6 +43,13 @@ class NewsListActivity : AppCompatActivity() {
                 val navigateToDetailsIntent = Intent(this, NewsDetailActivity::class.java)
                 navigateToDetailsIntent.putExtra(NewsDetailActivity.NEWS_DETAIL_KEY, news)
                 startActivity(navigateToDetailsIntent)
+            }
+        }
+
+        viewModel.navigationSearchNews.observe(this) { event ->
+            event.handleEvent {
+                val navigateToSearchNews = Intent(this, SearchNewsActivity::class.java)
+                startActivity(navigateToSearchNews)
             }
         }
 
