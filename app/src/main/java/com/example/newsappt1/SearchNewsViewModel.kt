@@ -8,10 +8,15 @@ import androidx.lifecycle.ViewModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.concurrent.schedule
 
 class SearchNewsViewModel: ViewModel() {
 
     private val service = RetrofitInitializer.getNewsApiService()
+
+    private var timer = Timer()
 
     private val _screenState: MutableLiveData<ScreenState<List<News>>> = MutableLiveData()
     val screenState: LiveData<ScreenState<List<News>>>
@@ -26,7 +31,11 @@ class SearchNewsViewModel: ViewModel() {
         get() = _message
 
     fun onSearchEditTextChanged(text: CharSequence?) {
-        searchNews(text.toString())
+        timer.cancel()
+        timer = Timer()
+        timer.schedule(2000) {
+            searchNews(text.toString())
+        }
     }
 
     fun onNewsItemClicked(clickedNews: News) {
@@ -43,19 +52,19 @@ class SearchNewsViewModel: ViewModel() {
     }
 
     private fun searchNews(searchText: String) {
-        _screenState.value = ScreenState.Loading()
+        _screenState.postValue(ScreenState.Loading())
 
         service.getEverything(searchText).enqueue(object : Callback<NewsList> {
             override fun onResponse(call: Call<NewsList>, response: Response<NewsList>) {
                 if (response.isSuccessful && response.body() != null) {
-                    _screenState.value = ScreenState.Success(response.body()!!.items as ArrayList<News>)
+                    _screenState.postValue(ScreenState.Success(response.body()!!.items as ArrayList<News>))
                 } else {
-                    _screenState.value = ScreenState.Error()
+                    _screenState.postValue(ScreenState.Error())
                 }
             }
 
             override fun onFailure(call: Call<NewsList>, t: Throwable) {
-                _screenState.value = ScreenState.Error()
+                _screenState.postValue(ScreenState.Error())
             }
 
         })
