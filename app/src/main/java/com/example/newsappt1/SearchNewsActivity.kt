@@ -1,8 +1,10 @@
 package com.example.newsappt1
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -49,6 +51,23 @@ class SearchNewsActivity : AppCompatActivity() {
                     binding.emptyStateIndicator.visibility = View.GONE
                     binding.progressIndicator.visibility = View.VISIBLE
                 }
+            }
+        }
+
+        viewModel.navigationShowEntireNews.observe(this) { uriEvent ->
+            uriEvent.handleEvent { uri ->
+                val intent = Intent(Intent.ACTION_VIEW, uri)
+                if (intent.resolveActivity(packageManager) != null) {
+                    startActivity(intent)
+                } else {
+                    viewModel.onShowNewsResolveActivityFail()
+                }
+            }
+        }
+
+        viewModel.message.observe(this) { textIdEvent ->
+            textIdEvent.handleEvent { textId ->
+                Toast.makeText(this, textId, Toast.LENGTH_SHORT).show()
             }
         }
 

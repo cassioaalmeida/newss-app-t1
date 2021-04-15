@@ -1,5 +1,7 @@
 package com.example.newsappt1
 
+import android.net.Uri
+import android.webkit.URLUtil
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -15,11 +17,30 @@ class SearchNewsViewModel: ViewModel() {
     val screenState: LiveData<ScreenState<List<News>>>
         get() = _screenState
 
+    private val _navigationShowEntireNews: MutableLiveData<Event<Uri>> = MutableLiveData()
+    val navigationShowEntireNews: LiveData<Event<Uri>>
+        get() = _navigationShowEntireNews
+
+    private val _message: MutableLiveData<Event<Int>> = MutableLiveData()
+    val message: LiveData<Event<Int>>
+        get() = _message
+
     fun onSearchEditTextChanged(text: CharSequence?) {
         searchNews(text.toString())
     }
 
-    fun onNewsItemClicked(clickedNews: News) {    }
+    fun onNewsItemClicked(clickedNews: News) {
+        if (URLUtil.isValidUrl(clickedNews.newsUrl)) {
+            val webpage: Uri = Uri.parse(clickedNews.newsUrl)
+            _navigationShowEntireNews.value = Event(webpage)
+        } else {
+            _message.value = Event(R.string.invalid_url)
+        }
+    }
+
+    fun onShowNewsResolveActivityFail() {
+        _message.value = Event(R.string.browser_needed)
+    }
 
     private fun searchNews(searchText: String) {
         _screenState.value = ScreenState.Loading()
@@ -39,4 +60,5 @@ class SearchNewsViewModel: ViewModel() {
 
         })
     }
+
 }
