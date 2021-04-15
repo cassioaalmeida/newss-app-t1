@@ -1,4 +1,4 @@
-package com.example.newsappt1
+package com.example.newsappt1.presentation.common
 
 class Event<T>(private val content: T) {
 

@@ -1,8 +1,10 @@
-package com.example.newsappt1
+package com.example.newsappt1.presentation.common
 
 import android.content.Context
 import android.view.View
 import com.bumptech.glide.Glide
+import com.example.newsappt1.data.model.News
+import com.example.newsappt1.R
 import com.example.newsappt1.databinding.NewsItemBinding
 import com.example.newsappt1.databinding.TextItemBinding
 import com.xwray.groupie.GroupAdapter

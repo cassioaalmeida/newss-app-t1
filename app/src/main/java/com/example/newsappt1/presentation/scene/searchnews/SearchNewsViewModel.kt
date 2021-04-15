@@ -1,10 +1,16 @@
-package com.example.newsappt1
+package com.example.newsappt1.presentation.scene.searchnews
 
 import android.net.Uri
 import android.webkit.URLUtil
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.newsappt1.*
+import com.example.newsappt1.data.model.News
+import com.example.newsappt1.data.model.NewsList
+import com.example.newsappt1.data.remote.RetrofitInitializer
+import com.example.newsappt1.presentation.common.Event
+import com.example.newsappt1.presentation.common.ScreenState
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -56,7 +62,7 @@ class SearchNewsViewModel: ViewModel() {
 
         service.getEverything(searchText).enqueue(object : Callback<NewsList> {
             override fun onResponse(call: Call<NewsList>, response: Response<NewsList>) {
-                if (response.isSuccessful && response.body() != null) {
+                if (response.isSuccessful && response.body() != null && response.body()!!.items.isNotEmpty()) {
                     _screenState.postValue(ScreenState.Success(response.body()!!.items as ArrayList<News>))
                 } else {
                     _screenState.postValue(ScreenState.Error())

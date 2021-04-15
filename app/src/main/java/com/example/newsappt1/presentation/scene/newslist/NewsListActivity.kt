@@ -1,4 +1,4 @@
-package com.example.newsappt1
+package com.example.newsappt1.presentation.scene.newslist
 
 import android.content.Intent
 import android.os.Bundle
@@ -7,7 +7,12 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.newsappt1.data.model.News
+import com.example.newsappt1.presentation.common.NewsListAdapter
+import com.example.newsappt1.presentation.common.ScreenState
 import com.example.newsappt1.databinding.ActivityNewsListBinding
+import com.example.newsappt1.presentation.scene.newsdetail.NewsDetailActivity
+import com.example.newsappt1.presentation.scene.searchnews.SearchNewsActivity
 
 class NewsListActivity : AppCompatActivity() {
 

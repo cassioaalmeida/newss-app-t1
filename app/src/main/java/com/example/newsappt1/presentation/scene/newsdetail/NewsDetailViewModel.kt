@@ -1,10 +1,13 @@
-package com.example.newsappt1
+package com.example.newsappt1.presentation.scene.newsdetail
 
 import android.net.Uri
 import android.webkit.URLUtil
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.newsappt1.presentation.common.Event
+import com.example.newsappt1.data.model.News
+import com.example.newsappt1.R
 
 class NewsDetailViewModel(news: News) : ViewModel() {
 

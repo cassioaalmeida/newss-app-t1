@@ -1,4 +1,4 @@
-package com.example.newsappt1
+package com.example.newsappt1.presentation.scene.newsdetail
 
 import android.content.Intent
 import android.os.Bundle
@@ -7,6 +7,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
+import com.example.newsappt1.data.model.News
+import com.example.newsappt1.R
 import com.example.newsappt1.databinding.ActivityNewsDetailBinding
 
 class NewsDetailActivity : AppCompatActivity() {
