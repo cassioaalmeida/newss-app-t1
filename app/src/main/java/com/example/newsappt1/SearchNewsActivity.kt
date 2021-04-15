@@ -2,6 +2,7 @@ package com.example.newsappt1
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -28,9 +29,26 @@ class SearchNewsActivity : AppCompatActivity() {
             viewModel.onSearchEditTextChanged(text)
         }
 
-        viewModel.searchedNews.observe(this) { searchedNewsList ->
-            adapter.setData(searchedNewsList) { clickedNews ->
-                viewModel.onNewsItemClicked(clickedNews)
+        viewModel.screenState.observe(this) { lastScreenState ->
+            when(lastScreenState) {
+                is ScreenState.Success -> {
+                    adapter.setData(lastScreenState.data) { clickedNews ->
+                        viewModel.onNewsItemClicked(clickedNews)
+                    }
+                    binding.progressIndicator.visibility = View.GONE
+                    binding.emptyStateIndicator.visibility = View.GONE
+                    binding.searchNewsList.visibility = View.VISIBLE
+                }
+                is ScreenState.Error -> {
+                    binding.progressIndicator.visibility = View.GONE
+                    binding.searchNewsList.visibility = View.GONE
+                    binding.emptyStateIndicator.visibility = View.VISIBLE
+                }
+                is ScreenState.Loading -> {
+                    binding.searchNewsList.visibility = View.GONE
+                    binding.emptyStateIndicator.visibility = View.GONE
+                    binding.progressIndicator.visibility = View.VISIBLE
+                }
             }
         }
 

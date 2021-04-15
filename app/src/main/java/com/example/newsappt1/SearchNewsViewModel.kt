@@ -11,9 +11,9 @@ class SearchNewsViewModel: ViewModel() {
 
     private val service = RetrofitInitializer.getNewsApiService()
 
-    private val _searchedNews: MutableLiveData<List<News>> = MutableLiveData()
-    val searchedNews: LiveData<List<News>>
-        get() = _searchedNews
+    private val _screenState: MutableLiveData<ScreenState<List<News>>> = MutableLiveData()
+    val screenState: LiveData<ScreenState<List<News>>>
+        get() = _screenState
 
     fun onSearchEditTextChanged(text: CharSequence?) {
         searchNews(text.toString())
@@ -22,15 +22,19 @@ class SearchNewsViewModel: ViewModel() {
     fun onNewsItemClicked(clickedNews: News) {    }
 
     private fun searchNews(searchText: String) {
+        _screenState.value = ScreenState.Loading()
+
         service.getEverything(searchText).enqueue(object : Callback<NewsList> {
             override fun onResponse(call: Call<NewsList>, response: Response<NewsList>) {
                 if (response.isSuccessful && response.body() != null) {
-                    _searchedNews.value = response.body()!!.items as ArrayList<News>
+                    _screenState.value = ScreenState.Success(response.body()!!.items as ArrayList<News>)
+                } else {
+                    _screenState.value = ScreenState.Error()
                 }
             }
 
             override fun onFailure(call: Call<NewsList>, t: Throwable) {
-                TODO("Not yet implemented")
+                _screenState.value = ScreenState.Error()
             }
 
         })

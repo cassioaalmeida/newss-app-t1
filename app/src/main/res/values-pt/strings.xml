@@ -10,6 +10,7 @@
     <string name="unknown">desconhecido</string>
     <string name="invalid_url">URL inválido</string>
     <string name="browser_needed">Você precisa instalar um navegador</string>
-    <string name="type_your_search">Type your search...</string>
-    <string name="click_to_search_news">Click to search news</string>
+    <string name="type_your_search">Digite sua pesquisa…</string>
+    <string name="click_to_search_news">Clique para pesquisar uma notícia</string>
+    <string name="no_results_founded">Nenhum resultado encontrado ou ocorreu um erro. Tente novamente.</string>
 </resources>

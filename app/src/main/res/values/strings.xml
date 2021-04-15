@@ -9,6 +9,7 @@
     <string name="unknown">unknown</string>
     <string name="invalid_url">Invalid URL</string>
     <string name="browser_needed">You need to install a browser</string>
-    <string name="type_your_search">Type your search...</string>
+    <string name="type_your_search">Type your search…</string>
     <string name="click_to_search_news">Click to search news</string>
+    <string name="no_results_founded">No results founded or an error occurred. Please try again.</string>
 </resources>
