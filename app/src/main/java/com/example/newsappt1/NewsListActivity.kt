@@ -14,8 +14,6 @@ class NewsListActivity : AppCompatActivity() {
     private lateinit var viewModel: NewsListViewModel
     lateinit var binding: ActivityNewsListBinding
 
-    private lateinit var adapter: NewsListAdapter
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -33,7 +31,7 @@ class NewsListActivity : AppCompatActivity() {
             viewModel.onSearchNewsClicked()
         }
 
-        adapter = NewsListAdapter(this)
+        val adapter = NewsListAdapter(this)
         binding.recyclerviewNews.adapter = adapter
         binding.recyclerviewNews.layoutManager = LinearLayoutManager(this)
 
@@ -57,7 +55,7 @@ class NewsListActivity : AppCompatActivity() {
             Log.i("LiveDataEvent", "Recebi screen state")
             when (lastScreenState) {
                 is ScreenState.Success<List<News>> -> {
-                    adapter.addData(lastScreenState.data) { news ->
+                    adapter.setData(lastScreenState.data) { news ->
                         viewModel.onNewsItemClicked(news)
                     }
                     binding.progressIndicator.visibility = View.GONE

@@ -15,7 +15,8 @@ class NewsListAdapter(val context: Context): GroupAdapter<GroupieViewHolder>() {
         add(TextItem(text, clickListener))
     }
 
-    fun addData(newsList: List<News>, clickListener: (News) -> Unit) {
+    fun setData(newsList: List<News>, clickListener: (News) -> Unit) {
+        clear()
         newsList.forEach { news ->
             add(NewsItem(news, clickListener))
         }
