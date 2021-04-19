@@ -5,23 +5,17 @@ import android.webkit.URLUtil
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.newsappt1.*
+import com.example.newsappt1.R
 import com.example.newsappt1.data.model.News
-import com.example.newsappt1.data.model.NewsList
-import com.example.newsappt1.data.remote.RetrofitInitializer
+import com.example.newsappt1.data.repository.NewsRepository
 import com.example.newsappt1.presentation.common.Event
 import com.example.newsappt1.presentation.common.ScreenState
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import java.util.*
-import kotlin.collections.ArrayList
 import kotlin.concurrent.schedule
 
-class SearchNewsViewModel: ViewModel() {
+class SearchNewsViewModel : ViewModel() {
 
-    private val service = RetrofitInitializer.getNewsApiService()
-
+    private val repository = NewsRepository()
     private var timer = Timer()
 
     private val _screenState: MutableLiveData<ScreenState<List<News>>> = MutableLiveData()
@@ -60,20 +54,15 @@ class SearchNewsViewModel: ViewModel() {
     private fun searchNews(searchText: String) {
         _screenState.postValue(ScreenState.Loading())
 
-        service.getEverything(searchText).enqueue(object : Callback<NewsList> {
-            override fun onResponse(call: Call<NewsList>, response: Response<NewsList>) {
-                if (response.isSuccessful && response.body() != null && response.body()!!.items.isNotEmpty()) {
-                    _screenState.postValue(ScreenState.Success(response.body()!!.items as ArrayList<News>))
-                } else {
-                    _screenState.postValue(ScreenState.Error())
-                }
-            }
-
-            override fun onFailure(call: Call<NewsList>, t: Throwable) {
+        repository.searchNews(
+            searchText,
+            { searchedNews ->
+                _screenState.postValue(ScreenState.Success(searchedNews))
+            },
+            {
                 _screenState.postValue(ScreenState.Error())
             }
-
-        })
+        )
     }
 
 }

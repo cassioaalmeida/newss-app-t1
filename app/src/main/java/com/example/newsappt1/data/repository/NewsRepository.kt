@@ -21,6 +21,7 @@ class NewsRepository {
             override fun onResponse(call: Call<NewsList>, response: Response<NewsList>) {
                 if (response.isSuccessful && response.body() != null && response.body()!!.items.isNotEmpty()) {
                     val remoteNews: List<News> = response.body()!!.items
+                    // alguma lógica para inserir ids nos itens
                     newsCDS.saveNewsList(remoteNews)
                     onSuccess(remoteNews)
                 } else {
@@ -43,4 +44,26 @@ class NewsRepository {
             }
         })
     }
+
+    fun searchNews(
+        searchText: String,
+        onSuccess: (List<News>) -> Unit,
+        onError: () -> Unit
+    ) {
+        newsRDS.getEverything(searchText).enqueue(object : Callback<NewsList> {
+            override fun onResponse(call: Call<NewsList>, response: Response<NewsList>) {
+                if (response.isSuccessful && response.body() != null && response.body()!!.items.isNotEmpty()) {
+                    onSuccess(response.body()!!.items)
+                } else {
+                    onError()
+                }
+            }
+
+            override fun onFailure(call: Call<NewsList>, t: Throwable) {
+                onError()
+            }
+
+        })
+    }
+
 }
