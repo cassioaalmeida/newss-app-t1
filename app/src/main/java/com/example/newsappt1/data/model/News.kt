@@ -16,7 +16,8 @@ data class News(
     @SerializedName("publishedAt")
     val lastUpdate: String,
     @SerializedName("url")
-    val newsUrl: String
+    val newsUrl: String,
+    val id: Int? = null
 ) : Parcelable {
 
     @Parcelize

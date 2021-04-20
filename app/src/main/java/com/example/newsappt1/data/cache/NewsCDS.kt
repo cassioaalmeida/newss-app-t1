@@ -13,7 +13,26 @@ class NewsCDS {
         Paper.book().write(NEWS_LIST_KEY, newsList)
     }
 
-    fun getNewsList(): List<News>? {
-        return Paper.book().read(NEWS_LIST_KEY)
+    fun getNewsList(
+        onSuccess: (List<News>) -> Unit,
+        onError: () -> Unit
+    ) {
+        val newsList: List<News>? = Paper.book().read(NEWS_LIST_KEY)
+        if (newsList != null)
+            onSuccess(newsList)
+        else
+            onError()
+    }
+
+    fun getNews(newsId: Int, onSuccess: (News) -> Unit, onError: () -> Unit) {
+        val news: News? = Paper.book().read<List<News>?>(NEWS_LIST_KEY)?.find { news ->
+            news.id == newsId
+        }
+
+        if(news != null) {
+            onSuccess(news)
+        } else {
+            onError()
+        }
     }
 }

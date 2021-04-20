@@ -21,26 +21,18 @@ class NewsRepository {
             override fun onResponse(call: Call<NewsList>, response: Response<NewsList>) {
                 if (response.isSuccessful && response.body() != null && response.body()!!.items.isNotEmpty()) {
                     val remoteNews: List<News> = response.body()!!.items
-                    // alguma lógica para inserir ids nos itens
-                    newsCDS.saveNewsList(remoteNews)
-                    onSuccess(remoteNews)
-                } else {
-                    val cacheNews: List<News>? = newsCDS.getNewsList()
-                    if (cacheNews != null) {
-                        onSuccess(cacheNews)
-                    } else {
-                        onError()
+                    val newsWithIds = remoteNews.mapIndexed { index, news ->
+                        news.copy(id = index)
                     }
+                    newsCDS.saveNewsList(newsWithIds)
+                    onSuccess(newsWithIds)
+                } else {
+                    newsCDS.getNewsList(onSuccess, onError)
                 }
             }
 
             override fun onFailure(call: Call<NewsList>, t: Throwable) {
-                val cacheNews: List<News>? = newsCDS.getNewsList()
-                if (cacheNews != null) {
-                    onSuccess(cacheNews)
-                } else {
-                    onError()
-                }
+                newsCDS.getNewsList(onSuccess, onError)
             }
         })
     }
@@ -64,6 +56,10 @@ class NewsRepository {
             }
 
         })
+    }
+
+    fun getNews(newsId: Int, onSuccess: (News) -> Unit, onError: () -> Unit) {
+        newsCDS.getNews(newsId, onSuccess, onError)
     }
 
 }

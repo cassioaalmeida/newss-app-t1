@@ -8,12 +8,16 @@ import androidx.lifecycle.ViewModel
 import com.example.newsappt1.presentation.common.Event
 import com.example.newsappt1.data.model.News
 import com.example.newsappt1.R
+import com.example.newsappt1.data.repository.NewsRepository
+import com.example.newsappt1.presentation.common.ScreenState
 
-class NewsDetailViewModel(news: News) : ViewModel() {
+class NewsDetailViewModel(newsId: Int) : ViewModel() {
 
-    private val _newsDetail: MutableLiveData<News> = MutableLiveData()
-    val newsDetail: LiveData<News>
-        get() = _newsDetail
+    private val repository = NewsRepository()
+
+    private val _screenState: MutableLiveData<ScreenState<News>> = MutableLiveData()
+    val screenState: LiveData<ScreenState<News>>
+        get() = _screenState
 
     private val _navigationShowNews: MutableLiveData<Event<Uri>> = MutableLiveData()
     val navigationShowNews: LiveData<Event<Uri>>
@@ -24,7 +28,21 @@ class NewsDetailViewModel(news: News) : ViewModel() {
         get() = _message
 
     init {
-        _newsDetail.value = news
+        getNewsDetail(newsId)
+    }
+
+    private fun getNewsDetail(newsId: Int) {
+        if(newsId < 0) throw IllegalArgumentException("newsId must be > 0")
+
+        repository.getNews(
+            newsId,
+            { news ->
+                _screenState.value = ScreenState.Success(news)
+            },
+            {
+                _screenState.value = ScreenState.Error()
+            }
+        )
     }
 
     fun onShowNewsClicked(news: News) {

@@ -14,8 +14,8 @@ class NewsListViewModel() : ViewModel() {
     val screenState: LiveData<ScreenState<List<News>>>
         get() = _screenState
 
-    private val _navigationDetail: MutableLiveData<Event<News>> = MutableLiveData()
-    val navigationDetail: LiveData<Event<News>>
+    private val _navigationDetail: MutableLiveData<Event<Int>> = MutableLiveData()
+    val navigationDetail: LiveData<Event<Int>>
         get() = _navigationDetail
 
     private val _navigationSearchNews: MutableLiveData<Event<Unit>> = MutableLiveData()
@@ -37,7 +37,7 @@ class NewsListViewModel() : ViewModel() {
     }
 
     fun onNewsItemClicked(news: News) {
-        _navigationDetail.value = Event(news)
+        _navigationDetail.value = Event(news.id!!)
     }
 
     private fun getNewsList() {

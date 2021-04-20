@@ -40,11 +40,11 @@ class NewsListActivity : AppCompatActivity() {
         binding.recyclerviewNews.adapter = adapter
         binding.recyclerviewNews.layoutManager = LinearLayoutManager(this)
 
-        viewModel.navigationDetail.observe(this) { newsEvent ->
+        viewModel.navigationDetail.observe(this) { newsIdEvent ->
             Log.i("LiveDataEvent", "Recebi navigation detail")
-            newsEvent.handleEvent { news ->
+            newsIdEvent.handleEvent { newsId ->
                 val navigateToDetailsIntent = Intent(this, NewsDetailActivity::class.java)
-                navigateToDetailsIntent.putExtra(NewsDetailActivity.NEWS_DETAIL_KEY, news)
+                navigateToDetailsIntent.putExtra(NewsDetailActivity.NEWS_DETAIL_KEY, newsId)
                 startActivity(navigateToDetailsIntent)
             }
         }
