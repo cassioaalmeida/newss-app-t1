@@ -8,7 +8,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.newsappt1.R
+import com.example.newsappt1.common.ApplicationDI
+import com.example.newsappt1.common.NewsAppApplication
 import com.example.newsappt1.data.model.News
+import com.example.newsappt1.data.repository.NewsRepository
 import com.example.newsappt1.databinding.ActivityNewsDetailBinding
 import com.example.newsappt1.presentation.common.ScreenState
 
@@ -19,7 +22,7 @@ class NewsDetailActivity : AppCompatActivity() {
     }
 
     private lateinit var binding: ActivityNewsDetailBinding
-    private lateinit var viewModel: NewsDetailViewModel
+    lateinit var viewModel: NewsDetailViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,8 +31,9 @@ class NewsDetailActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val receivedNewsId = intent.getIntExtra(NEWS_DETAIL_KEY, -1)
-        val viewModelFactory = NewsDetailViewModelFactory(receivedNewsId)
-        viewModel = ViewModelProvider(this, viewModelFactory).get(NewsDetailViewModel::class.java)
+
+        (application as NewsAppApplication).applicationDI
+            .inject(this, receivedNewsId)
 
         viewModel.screenState.observe(this) { screenState ->
             when (screenState) {

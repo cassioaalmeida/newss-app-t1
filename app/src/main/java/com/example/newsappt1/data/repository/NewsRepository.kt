@@ -3,15 +3,16 @@ package com.example.newsappt1.data.repository
 import com.example.newsappt1.data.cache.NewsCDS
 import com.example.newsappt1.data.model.News
 import com.example.newsappt1.data.model.NewsList
+import com.example.newsappt1.data.remote.NewsRDS
 import com.example.newsappt1.data.remote.RetrofitInitializer
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class NewsRepository {
-
-    private val newsRDS = RetrofitInitializer.getNewsApiService()
-    private val newsCDS = NewsCDS()
+class NewsRepository(
+    private val newsRDS: NewsRDS,
+    private val newsCDS: NewsCDS
+) {
 
     fun getNewsList(
         onSuccess: (List<News>) -> Unit,

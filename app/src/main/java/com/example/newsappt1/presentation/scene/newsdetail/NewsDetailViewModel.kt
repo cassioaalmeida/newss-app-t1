@@ -11,9 +11,10 @@ import com.example.newsappt1.R
 import com.example.newsappt1.data.repository.NewsRepository
 import com.example.newsappt1.presentation.common.ScreenState
 
-class NewsDetailViewModel(newsId: Int) : ViewModel() {
-
-    private val repository = NewsRepository()
+class NewsDetailViewModel(
+    newsId: Int,
+    private val repository: NewsRepository
+) : ViewModel() {
 
     private val _screenState: MutableLiveData<ScreenState<News>> = MutableLiveData()
     val screenState: LiveData<ScreenState<News>>
@@ -32,7 +33,7 @@ class NewsDetailViewModel(newsId: Int) : ViewModel() {
     }
 
     private fun getNewsDetail(newsId: Int) {
-        if(newsId < 0) throw IllegalArgumentException("newsId must be > 0")
+        if (newsId < 0) throw IllegalArgumentException("newsId must be > 0")
 
         repository.getNews(
             newsId,

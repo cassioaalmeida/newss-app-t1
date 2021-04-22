@@ -5,6 +5,8 @@ import io.paperdb.Paper
 
 class NewsAppApplication: Application() {
 
+    val applicationDI = ApplicationDI()
+
     override fun onCreate() {
         super.onCreate()
 
