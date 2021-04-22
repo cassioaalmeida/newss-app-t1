@@ -11,11 +11,13 @@ import com.example.newsappt1.data.repository.NewsRepository
 import com.example.newsappt1.presentation.common.Event
 import com.example.newsappt1.presentation.common.ScreenState
 import java.util.*
+import javax.inject.Inject
 import kotlin.concurrent.schedule
 
-class SearchNewsViewModel : ViewModel() {
+class SearchNewsViewModel @Inject constructor(
+    private val repository: NewsRepository
+) : ViewModel() {
 
-    private val repository = NewsRepository()
     private var timer = Timer()
 
     private val _screenState: MutableLiveData<ScreenState<List<News>>> = MutableLiveData()

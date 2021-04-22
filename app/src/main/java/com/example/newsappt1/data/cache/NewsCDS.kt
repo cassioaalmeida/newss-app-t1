@@ -2,8 +2,9 @@ package com.example.newsappt1.data.cache
 
 import com.example.newsappt1.data.model.News
 import io.paperdb.Paper
+import javax.inject.Inject
 
-class NewsCDS {
+class NewsCDS @Inject constructor() {
 
     companion object {
         private const val NEWS_LIST_KEY = "NEWS_LIST_KEY"

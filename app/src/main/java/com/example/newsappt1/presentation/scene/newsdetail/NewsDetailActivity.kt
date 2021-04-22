@@ -8,12 +8,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.newsappt1.R
-import com.example.newsappt1.common.ApplicationDI
 import com.example.newsappt1.common.NewsAppApplication
 import com.example.newsappt1.data.model.News
-import com.example.newsappt1.data.repository.NewsRepository
 import com.example.newsappt1.databinding.ActivityNewsDetailBinding
 import com.example.newsappt1.presentation.common.ScreenState
+import javax.inject.Inject
 
 class NewsDetailActivity : AppCompatActivity() {
 
@@ -22,6 +21,10 @@ class NewsDetailActivity : AppCompatActivity() {
     }
 
     private lateinit var binding: ActivityNewsDetailBinding
+
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
+
     lateinit var viewModel: NewsDetailViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,10 +33,13 @@ class NewsDetailActivity : AppCompatActivity() {
         binding = ActivityNewsDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val receivedNewsId = intent.getIntExtra(NEWS_DETAIL_KEY, -1)
+        viewModel = ViewModelProvider(this, viewModelFactory).get(NewsDetailViewModel::class.java)
 
-        (application as NewsAppApplication).applicationDI
-            .inject(this, receivedNewsId)
+        val receivedNewsId = intent.getIntExtra(NEWS_DETAIL_KEY, -1)
+        viewModel.onIdReceived(receivedNewsId)
+
+//        (application as NewsAppApplication).applicationDI
+//            .inject(this, receivedNewsId)
 
         viewModel.screenState.observe(this) { screenState ->
             when (screenState) {

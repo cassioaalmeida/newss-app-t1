@@ -13,8 +13,12 @@ import com.example.newsappt1.presentation.common.ScreenState
 import com.example.newsappt1.databinding.ActivityNewsListBinding
 import com.example.newsappt1.presentation.scene.newsdetail.NewsDetailActivity
 import com.example.newsappt1.presentation.scene.searchnews.SearchNewsActivity
+import javax.inject.Inject
 
 class NewsListActivity : AppCompatActivity() {
+
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
 
     private lateinit var viewModel: NewsListViewModel
     lateinit var binding: ActivityNewsListBinding
@@ -26,7 +30,7 @@ class NewsListActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         Log.i("ViewModel LifeCycle", "Obteve instancia do ViewModel")
-        viewModel = ViewModelProvider(this).get(NewsListViewModel::class.java)
+        viewModel = ViewModelProvider(this, viewModelFactory).get(NewsListViewModel::class.java)
 
         binding.btnTryAgain.setOnClickListener {
             viewModel.onTryAgainClicked()

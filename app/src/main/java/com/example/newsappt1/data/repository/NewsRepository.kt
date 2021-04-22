@@ -8,8 +8,9 @@ import com.example.newsappt1.data.remote.RetrofitInitializer
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import javax.inject.Inject
 
-class NewsRepository(
+class NewsRepository @Inject constructor(
     private val newsRDS: NewsRDS,
     private val newsCDS: NewsCDS
 ) {

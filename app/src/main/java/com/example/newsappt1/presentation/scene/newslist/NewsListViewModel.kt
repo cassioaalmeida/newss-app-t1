@@ -7,8 +7,11 @@ import com.example.newsappt1.data.model.News
 import com.example.newsappt1.data.repository.NewsRepository
 import com.example.newsappt1.presentation.common.Event
 import com.example.newsappt1.presentation.common.ScreenState
+import javax.inject.Inject
 
-class NewsListViewModel() : ViewModel() {
+class NewsListViewModel @Inject constructor(
+    private val repository: NewsRepository
+) : ViewModel() {
 
     private val _screenState: MutableLiveData<ScreenState<List<News>>> = MutableLiveData()
     val screenState: LiveData<ScreenState<List<News>>>
@@ -21,8 +24,6 @@ class NewsListViewModel() : ViewModel() {
     private val _navigationSearchNews: MutableLiveData<Event<Unit>> = MutableLiveData()
     val navigationSearchNews: LiveData<Event<Unit>>
         get() = _navigationSearchNews
-
-    private val repository = NewsRepository()
 
     init {
         getNewsList()

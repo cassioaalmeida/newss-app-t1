@@ -10,9 +10,9 @@ import com.example.newsappt1.data.model.News
 import com.example.newsappt1.R
 import com.example.newsappt1.data.repository.NewsRepository
 import com.example.newsappt1.presentation.common.ScreenState
+import javax.inject.Inject
 
-class NewsDetailViewModel(
-    newsId: Int,
+class NewsDetailViewModel @Inject constructor(
     private val repository: NewsRepository
 ) : ViewModel() {
 
@@ -28,7 +28,7 @@ class NewsDetailViewModel(
     val message: LiveData<Event<Int>>
         get() = _message
 
-    init {
+    fun onIdReceived(newsId: Int) {
         getNewsDetail(newsId)
     }
 

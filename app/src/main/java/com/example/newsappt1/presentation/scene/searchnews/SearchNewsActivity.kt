@@ -11,8 +11,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.newsappt1.presentation.common.NewsListAdapter
 import com.example.newsappt1.presentation.common.ScreenState
 import com.example.newsappt1.databinding.ActivitySearchNewsBinding
+import javax.inject.Inject
 
 class SearchNewsActivity : AppCompatActivity() {
+
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
 
     private lateinit var binding: ActivitySearchNewsBinding
     private lateinit var viewModel: SearchNewsViewModel
@@ -23,7 +27,7 @@ class SearchNewsActivity : AppCompatActivity() {
         binding = ActivitySearchNewsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        viewModel = ViewModelProvider(this).get(SearchNewsViewModel::class.java)
+        viewModel = ViewModelProvider(this, viewModelFactory).get(SearchNewsViewModel::class.java)
 
         val adapter = NewsListAdapter(this)
         binding.searchNewsList.adapter = adapter
