@@ -7,6 +7,7 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.newsappt1.common.NewsAppApplication
 import com.example.newsappt1.data.model.News
 import com.example.newsappt1.presentation.common.NewsListAdapter
 import com.example.newsappt1.presentation.common.ScreenState
@@ -28,6 +29,8 @@ class NewsListActivity : AppCompatActivity() {
 
         binding = ActivityNewsListBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        (application as NewsAppApplication).applicationComponent.inject(this)
 
         Log.i("ViewModel LifeCycle", "Obteve instancia do ViewModel")
         viewModel = ViewModelProvider(this, viewModelFactory).get(NewsListViewModel::class.java)

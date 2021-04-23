@@ -33,13 +33,12 @@ class NewsDetailActivity : AppCompatActivity() {
         binding = ActivityNewsDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        (application as NewsAppApplication).applicationComponent.inject(this)
+
         viewModel = ViewModelProvider(this, viewModelFactory).get(NewsDetailViewModel::class.java)
 
         val receivedNewsId = intent.getIntExtra(NEWS_DETAIL_KEY, -1)
         viewModel.onIdReceived(receivedNewsId)
-
-//        (application as NewsAppApplication).applicationDI
-//            .inject(this, receivedNewsId)
 
         viewModel.screenState.observe(this) { screenState ->
             when (screenState) {

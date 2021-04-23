@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.newsappt1.common.NewsAppApplication
 import com.example.newsappt1.presentation.common.NewsListAdapter
 import com.example.newsappt1.presentation.common.ScreenState
 import com.example.newsappt1.databinding.ActivitySearchNewsBinding
@@ -26,6 +27,8 @@ class SearchNewsActivity : AppCompatActivity() {
 
         binding = ActivitySearchNewsBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        (application as NewsAppApplication).applicationComponent.inject(this)
 
         viewModel = ViewModelProvider(this, viewModelFactory).get(SearchNewsViewModel::class.java)
 
