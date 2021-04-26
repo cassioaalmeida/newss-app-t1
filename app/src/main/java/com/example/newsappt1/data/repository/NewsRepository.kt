@@ -1,5 +1,6 @@
 package com.example.newsappt1.data.repository
 
+import android.util.Log
 import com.example.newsappt1.data.cache.NewsCDS
 import com.example.newsappt1.data.model.News
 import com.example.newsappt1.data.model.NewsList
@@ -11,8 +12,13 @@ import javax.inject.Inject
 
 class NewsRepository @Inject constructor(
     private val newsRDS: NewsRDS,
-    private val newsCDS: NewsCDS
+    private val newsCDS: NewsCDS,
 ) {
+    private val repositoryStrings: List<String> = listOf("repository1", "repository2", "repository3")
+
+    init {
+        Log.i("Inject list", repositoryStrings.toString())
+    }
 
     fun getNewsList(
         onSuccess: (List<News>) -> Unit,

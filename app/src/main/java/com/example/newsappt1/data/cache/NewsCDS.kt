@@ -1,10 +1,17 @@
 package com.example.newsappt1.data.cache
 
+import android.util.Log
 import com.example.newsappt1.data.model.News
 import io.paperdb.Paper
 import javax.inject.Inject
 
 class NewsCDS @Inject constructor() {
+
+    private val cacheStrings: List<String> = listOf("cache1", "cache2", "cache3")
+
+    init {
+        Log.i("Inject list", cacheStrings.toString())
+    }
 
     companion object {
         private const val NEWS_LIST_KEY = "NEWS_LIST_KEY"
@@ -30,7 +37,7 @@ class NewsCDS @Inject constructor() {
             news.id == newsId
         }
 
-        if(news != null) {
+        if (news != null) {
             onSuccess(news)
         } else {
             onError()
