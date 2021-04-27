@@ -1,16 +1,19 @@
 package com.example.newsappt1.data.cache
 
 import android.util.Log
+import com.example.newsappt1.common.di.CacheStrings
 import com.example.newsappt1.data.model.News
 import io.paperdb.Paper
 import javax.inject.Inject
 
-class NewsCDS @Inject constructor() {
+class NewsCDS @Inject constructor(
+    @CacheStrings private val cacheStrings: List<String>
+) {
 
-    private val cacheStrings: List<String> = listOf("cache1", "cache2", "cache3")
+//    private val cacheStrings: List<String> = listOf("cache1", "cache2", "cache3")
 
     init {
-        Log.i("Inject list", cacheStrings.toString())
+        Log.i("Inject List Cache", cacheStrings.toString())
     }
 
     companion object {

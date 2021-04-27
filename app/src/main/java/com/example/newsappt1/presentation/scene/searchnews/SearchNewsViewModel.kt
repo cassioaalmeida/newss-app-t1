@@ -15,10 +15,11 @@ import javax.inject.Inject
 import kotlin.concurrent.schedule
 
 class SearchNewsViewModel @Inject constructor(
-    private val repository: NewsRepository
+    private val repository: NewsRepository,
+    private val timer: Timer
 ) : ViewModel() {
 
-    private var timer = Timer()
+    private var timerTask: TimerTask? = null
 
     private val _screenState: MutableLiveData<ScreenState<List<News>>> = MutableLiveData()
     val screenState: LiveData<ScreenState<List<News>>>
@@ -33,9 +34,9 @@ class SearchNewsViewModel @Inject constructor(
         get() = _message
 
     fun onSearchEditTextChanged(text: CharSequence?) {
-        timer.cancel()
-        timer = Timer()
-        timer.schedule(2000) {
+        timerTask?.cancel()
+
+        timerTask = timer.schedule(2000) {
             searchNews(text.toString())
         }
     }

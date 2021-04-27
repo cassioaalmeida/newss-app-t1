@@ -1,8 +1,7 @@
-package com.example.newsappt1.common
+package com.example.newsappt1.common.di
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.newsappt1.common.di.ViewModelKey
 import com.example.newsappt1.data.remote.NewsRDS
 import com.example.newsappt1.presentation.common.ViewModelFactory
 import com.example.newsappt1.presentation.scene.newsdetail.NewsDetailActivity
@@ -11,14 +10,15 @@ import com.example.newsappt1.presentation.scene.newslist.NewsListActivity
 import com.example.newsappt1.presentation.scene.newslist.NewsListViewModel
 import com.example.newsappt1.presentation.scene.searchnews.SearchNewsActivity
 import com.example.newsappt1.presentation.scene.searchnews.SearchNewsViewModel
-import dagger.*
+import dagger.Binds
+import dagger.Component
+import dagger.Module
+import dagger.Provides
 import dagger.multibindings.IntoMap
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import javax.inject.Inject
-import javax.inject.Provider
+import java.util.*
 import javax.inject.Singleton
-import kotlin.reflect.KClass
 
 @Singleton
 @Component(modules = [ApplicationModule::class, ViewModelModule::class])
@@ -32,14 +32,29 @@ interface ApplicationComponent {
 class ApplicationModule() {
 
     @Provides
-    fun retrofit(): Retrofit = Retrofit.Builder()
-        .baseUrl("https://newsapi.org/v2/")
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
+    fun converterFactory(): GsonConverterFactory = GsonConverterFactory.create()
+
+    @Provides
+    fun retrofit(converterFactory: GsonConverterFactory): Retrofit =
+        Retrofit.Builder()
+            .baseUrl("https://newsapi.org/v2/")
+            .addConverterFactory(converterFactory)
+            .build()
 
     @Provides
     fun newsRDS(retrofit: Retrofit): NewsRDS =
         retrofit.create(NewsRDS::class.java)
+
+    @Provides
+    fun timer(): Timer = Timer()
+
+    @Provides
+    @CacheStrings
+    fun cacheStrings(): List<String> = listOf("cache1", "cache2", "cache3")
+
+    @Provides
+    @RepositoryStrings
+    fun repositoryStrings(): List<String> = listOf("repository1", "repository2", "repository3")
 
 }
 
