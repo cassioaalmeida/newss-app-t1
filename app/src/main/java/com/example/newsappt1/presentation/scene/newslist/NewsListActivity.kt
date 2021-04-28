@@ -9,9 +9,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.newsappt1.common.NewsAppApplication
 import com.example.newsappt1.data.model.News
+import com.example.newsappt1.databinding.ActivityNewsListBinding
 import com.example.newsappt1.presentation.common.NewsListAdapter
 import com.example.newsappt1.presentation.common.ScreenState
-import com.example.newsappt1.databinding.ActivityNewsListBinding
 import com.example.newsappt1.presentation.scene.newsdetail.NewsDetailActivity
 import com.example.newsappt1.presentation.scene.searchnews.SearchNewsActivity
 import javax.inject.Inject
