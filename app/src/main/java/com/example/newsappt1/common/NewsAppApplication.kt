@@ -4,7 +4,7 @@ import androidx.multidex.MultiDexApplication
 import com.example.newsappt1.common.di.ApplicationComponent
 import com.example.newsappt1.common.di.ApplicationModule
 import com.example.newsappt1.common.di.DaggerApplicationComponent
-import io.paperdb.Paper
+import com.pacoworks.rxpaper2.RxPaperBook
 
 class NewsAppApplication : MultiDexApplication() {
 
@@ -13,7 +13,7 @@ class NewsAppApplication : MultiDexApplication() {
     override fun onCreate() {
         super.onCreate()
 
-        Paper.init(this)
+        RxPaperBook.init(this)
 
         applicationComponent =
             DaggerApplicationComponent.builder()

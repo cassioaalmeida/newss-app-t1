@@ -1,6 +1,7 @@
 package com.example.newsappt1.data.remote
 
 import com.example.newsappt1.data.model.NewsList
+import io.reactivex.Single
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -12,9 +13,9 @@ interface NewsRDS {
     }
 
     @GET("top-headlines?$API_KEY")
-    fun getTopHeadlines(@Query("country") country: String): Call<NewsList>
+    fun getTopHeadlines(@Query("country") country: String): Single<NewsList>
 
     @GET("everything?$API_KEY")
-    fun getEverything(@Query("q") query: String): Call<NewsList>
+    fun getEverything(@Query("q") query: String): Single<NewsList>
 
 }

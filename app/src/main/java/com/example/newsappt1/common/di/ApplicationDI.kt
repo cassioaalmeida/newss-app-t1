@@ -16,6 +16,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.multibindings.IntoMap
 import retrofit2.Retrofit
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.*
 import javax.inject.Singleton
@@ -35,10 +36,17 @@ class ApplicationModule() {
     fun converterFactory(): GsonConverterFactory = GsonConverterFactory.create()
 
     @Provides
-    fun retrofit(converterFactory: GsonConverterFactory): Retrofit =
+    fun adapterFactory(): RxJava2CallAdapterFactory = RxJava2CallAdapterFactory.create()
+
+    @Provides
+    fun retrofit(
+        converterFactory: GsonConverterFactory,
+        adapterFactory: RxJava2CallAdapterFactory
+    ): Retrofit =
         Retrofit.Builder()
             .baseUrl("https://newsapi.org/v2/")
             .addConverterFactory(converterFactory)
+            .addCallAdapterFactory(adapterFactory)
             .build()
 
     @Provides

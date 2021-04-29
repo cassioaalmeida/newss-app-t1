@@ -1,49 +1,28 @@
 package com.example.newsappt1.data.cache
 
-import android.util.Log
-import com.example.newsappt1.common.di.CacheStrings
 import com.example.newsappt1.data.model.News
-import io.paperdb.Paper
+import com.pacoworks.rxpaper2.RxPaperBook
+import io.reactivex.Completable
+import io.reactivex.Single
 import javax.inject.Inject
 
-class NewsCDS @Inject constructor(
-    @CacheStrings private val cacheStrings: List<String>
-) {
-
-//    private val cacheStrings: List<String> = listOf("cache1", "cache2", "cache3")
-
-    init {
-        Log.i("Inject List Cache", cacheStrings.toString())
-    }
+class NewsCDS @Inject constructor() {
 
     companion object {
         private const val NEWS_LIST_KEY = "NEWS_LIST_KEY"
     }
 
-    fun saveNewsList(newsList: List<News>) {
-        Paper.book().write(NEWS_LIST_KEY, newsList)
-    }
+    fun saveNewsList(newsList: List<News>): Completable =
+        RxPaperBook.with().write(NEWS_LIST_KEY, newsList)
 
-    fun getNewsList(
-        onSuccess: (List<News>) -> Unit,
-        onError: () -> Unit
-    ) {
-        val newsList: List<News>? = Paper.book().read(NEWS_LIST_KEY)
-        if (newsList != null)
-            onSuccess(newsList)
-        else
-            onError()
-    }
+    fun getNewsList(): Single<List<News>> =
+        RxPaperBook.with().read(NEWS_LIST_KEY)
 
-    fun getNews(newsId: Int, onSuccess: (News) -> Unit, onError: () -> Unit) {
-        val news: News? = Paper.book().read<List<News>?>(NEWS_LIST_KEY)?.find { news ->
-            news.id == newsId
-        }
-
-        if (news != null) {
-            onSuccess(news)
-        } else {
-            onError()
-        }
-    }
+    fun getNews(newsId: Int): Single<News> =
+        getNewsList()
+            .map { newsList ->
+                newsList.find { news ->
+                    news.id == newsId
+                }
+            }
 }
