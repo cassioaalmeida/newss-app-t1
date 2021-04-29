@@ -15,6 +15,7 @@ import dagger.Component
 import dagger.Module
 import dagger.Provides
 import dagger.multibindings.IntoMap
+import io.reactivex.disposables.CompositeDisposable
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
@@ -31,6 +32,9 @@ interface ApplicationComponent {
 
 @Module
 class ApplicationModule() {
+
+    @Provides
+    fun compositeDisposable(): CompositeDisposable = CompositeDisposable()
 
     @Provides
     fun converterFactory(): GsonConverterFactory = GsonConverterFactory.create()

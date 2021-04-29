@@ -5,15 +5,18 @@ import android.webkit.URLUtil
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.newsappt1.presentation.common.Event
-import com.example.newsappt1.data.model.News
 import com.example.newsappt1.R
+import com.example.newsappt1.data.model.News
 import com.example.newsappt1.data.repository.NewsRepository
+import com.example.newsappt1.presentation.common.Event
 import com.example.newsappt1.presentation.common.ScreenState
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.addTo
 import javax.inject.Inject
 
 class NewsDetailViewModel @Inject constructor(
-    private val repository: NewsRepository
+    private val repository: NewsRepository,
+    private val compositeDisposable: CompositeDisposable
 ) : ViewModel() {
 
     private val _screenState: MutableLiveData<ScreenState<News>> = MutableLiveData()
@@ -35,15 +38,10 @@ class NewsDetailViewModel @Inject constructor(
     private fun getNewsDetail(newsId: Int) {
         if (newsId < 0) throw IllegalArgumentException("newsId must be > 0")
 
-        repository.getNews(
-            newsId,
-            { news ->
-                _screenState.value = ScreenState.Success(news)
-            },
-            {
-                _screenState.value = ScreenState.Error()
-            }
-        )
+        repository.getNews(newsId).subscribe(
+            { _screenState.value = ScreenState.Success(it) },
+            { _screenState.value = ScreenState.Error() }
+        ).addTo(compositeDisposable)
     }
 
     fun onShowNewsClicked(news: News) {
@@ -57,5 +55,10 @@ class NewsDetailViewModel @Inject constructor(
 
     fun onShowNewsResolveActivityFail() {
         _message.value = Event(R.string.browser_needed)
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        compositeDisposable.clear()
     }
 }

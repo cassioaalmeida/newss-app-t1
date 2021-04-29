@@ -10,13 +10,16 @@ import com.example.newsappt1.data.model.News
 import com.example.newsappt1.data.repository.NewsRepository
 import com.example.newsappt1.presentation.common.Event
 import com.example.newsappt1.presentation.common.ScreenState
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.addTo
 import java.util.*
 import javax.inject.Inject
 import kotlin.concurrent.schedule
 
 class SearchNewsViewModel @Inject constructor(
     private val repository: NewsRepository,
-    private val timer: Timer
+    private val timer: Timer,
+    private val compositeDisposable: CompositeDisposable
 ) : ViewModel() {
 
     private var timerTask: TimerTask? = null
@@ -57,15 +60,15 @@ class SearchNewsViewModel @Inject constructor(
     private fun searchNews(searchText: String) {
         _screenState.postValue(ScreenState.Loading())
 
-        repository.searchNews(
-            searchText,
-            { searchedNews ->
-                _screenState.postValue(ScreenState.Success(searchedNews))
-            },
-            {
-                _screenState.postValue(ScreenState.Error())
-            }
-        )
+        repository.searchNews(searchText).subscribe(
+            { _screenState.postValue(ScreenState.Success(it)) },
+            { _screenState.postValue(ScreenState.Error()) }
+        ).addTo(compositeDisposable)
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        compositeDisposable.clear()
     }
 
 }
